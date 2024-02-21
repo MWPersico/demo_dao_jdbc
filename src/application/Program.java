@@ -14,8 +14,12 @@ public class Program {
 		
 		Seller seller = sellerDAO.findById(1);
 		List<Seller> sellers = sellerDAO.findByDepartment(dep);
+		List<Seller> sellers1 = sellerDAO.findAll();
 				
-		System.out.println(seller);
+		System.out.println("\nSellers by department: ");
 		sellers.forEach(element->System.out.println(element));
+		
+		System.out.println("\nAll sellers: ");
+		sellers1.forEach(element->System.out.println(element));
 	}
 }
