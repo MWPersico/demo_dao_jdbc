@@ -20,6 +20,8 @@ public class Program {
 		System.out.println("\nSellers by department: ");
 		sellers.forEach(element->System.out.println(element));
 		
+		sellerDAO.deleteById(11);
+		
 		System.out.println("\nAll sellers: ");
 		sellers1.forEach(element->System.out.println(element));
 		
