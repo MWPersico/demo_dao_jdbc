@@ -14,6 +14,9 @@ public class Program {
 		
 		GenericDAO<Seller> sellerDAO = DAOFactory.createSellerDAO();
 		
+		Seller seller1 = sellerDAO.findById(1);
+		
 		System.out.println(seller);
+		System.out.println(seller1);
 	}
 }
