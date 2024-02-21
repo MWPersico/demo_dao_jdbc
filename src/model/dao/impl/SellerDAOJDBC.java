@@ -5,15 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
 import db.DBException;
-import model.dao.GenericDAO;
+import model.dao.SellerDAO;
 import model.entities.Department;
 import model.entities.Seller;
 
-public class SellerDAOJDBC implements GenericDAO<Seller>{
+public class SellerDAOJDBC implements SellerDAO{
 	
 	Connection conn;
 	
@@ -52,13 +53,10 @@ public class SellerDAOJDBC implements GenericDAO<Seller>{
 			statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, id);
 			result = statement.executeQuery();
-			statement.getGeneratedKeys();
 			
 			if(result.next()) {
 				Department department = instantiateDepartment(result);
-				
 				Seller seller = instantiateSeller(result, department);
-				
 				return seller;
 			}
 		}catch(SQLException ex) {
@@ -75,6 +73,38 @@ public class SellerDAOJDBC implements GenericDAO<Seller>{
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<Seller> findByDepartment(Department department){
+		List<Seller> sellers = new ArrayList<>();
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		String query = 
+				"SELECT seller.*, department.Name AS DepName FROM seller "
+				+ "INNER JOIN department "
+				+ "ON seller.DepartmentId = department.Id "
+				+ "WHERE department.id = ? "
+				+ "ORDER BY Name;";
+		try {
+			statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			statement.setInt(1, department.getId());
+			result = statement.executeQuery();
+			
+			Department sharedDepartment = null;
+			while(result.next()) {
+				if(sharedDepartment == null) {
+					sharedDepartment = instantiateDepartment(result);
+				}
+				
+				sellers.add(instantiateSeller(result, sharedDepartment));
+			}
+		}catch(SQLException ex) {
+			throw new DBException(ex.getMessage());
+		}finally {
+			DB.closeResultSet(result);
+			DB.closeStatement(statement);
+		}
+		return sellers;
 	}
 	
 	private Department instantiateDepartment(ResultSet result) throws SQLException{

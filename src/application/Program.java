@@ -1,22 +1,21 @@
 package application;
 
-import java.util.Date;
+import java.util.List;
 
 import model.dao.DAOFactory;
-import model.dao.GenericDAO;
+import model.dao.SellerDAO;
 import model.entities.Department;
 import model.entities.Seller;
 
 public class Program {
 	public static void main(String[] args) {
-		Department obj = new Department(1, "Computers");
-		Seller seller = new Seller(1, "Marcos", "willian.marcos7@gmail.com", new Date(), 3000.0, obj );
+		SellerDAO sellerDAO = DAOFactory.createSellerDAO();		
+		Department dep = new Department(2, null);
 		
-		GenericDAO<Seller> sellerDAO = DAOFactory.createSellerDAO();
-		
-		Seller seller1 = sellerDAO.findById(1);
-		
+		Seller seller = sellerDAO.findById(1);
+		List<Seller> sellers = sellerDAO.findByDepartment(dep);
+				
 		System.out.println(seller);
-		System.out.println(seller1);
+		sellers.forEach(element->System.out.println(element));
 	}
 }
