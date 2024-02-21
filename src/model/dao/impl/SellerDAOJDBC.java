@@ -55,17 +55,9 @@ public class SellerDAOJDBC implements GenericDAO<Seller>{
 			statement.getGeneratedKeys();
 			
 			if(result.next()) {
-				Integer depId = result.getInt("DepartmentId");
-				String depName = result.getString("DepName");
-				Department department = new Department(depId, depName);
+				Department department = instantiateDepartment(result);
 				
-				Seller seller = new Seller();
-				seller.setId(result.getInt("Id"));
-				seller.setName(result.getString("Name"));
-				seller.setEmail(result.getString("Email"));
-				seller.setBaseSalary(result.getDouble("BaseSalary"));
-				seller.setBirthDate(result.getDate("BirthDate"));
-				seller.setDepartment(department);
+				Seller seller = instantiateSeller(result, department);
 				
 				return seller;
 			}
@@ -83,6 +75,21 @@ public class SellerDAOJDBC implements GenericDAO<Seller>{
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Department instantiateDepartment(ResultSet result) throws SQLException{
+		return new Department(result.getInt("DepartmentId"), result.getString("DepName"));
+	}
+	
+	private Seller instantiateSeller(ResultSet result, Department department) throws SQLException{
+		Seller seller = new Seller();
+		seller.setId(result.getInt("Id"));
+		seller.setName(result.getString("Name"));
+		seller.setEmail(result.getString("Email"));
+		seller.setBaseSalary(result.getDouble("BaseSalary"));
+		seller.setBirthDate(result.getDate("BirthDate"));
+		seller.setDepartment(department);
+		return seller;
 	}
 	
 }
