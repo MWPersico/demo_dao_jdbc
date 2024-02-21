@@ -11,7 +11,7 @@ import model.entities.Seller;
 public class Program {
 	public static void main(String[] args) {
 		SellerDAO sellerDAO = DAOFactory.createSellerDAO();		
-		Department dep = new Department(3, null);
+		Department dep = new Department(2, null);
 		
 		Seller seller = sellerDAO.findById(1);
 		List<Seller> sellers = sellerDAO.findByDepartment(dep);
@@ -24,7 +24,8 @@ public class Program {
 		sellers1.forEach(element->System.out.println(element));
 		
 		/*
-		Seller sellerToInsert = new Seller(null, "Leonardo", "leo@gmail.com", new Date(), 2000.0, dep);
+		Seller sellerToUpdate = new Seller(11, "Leonardo Renan", "leo@hotmail.com", new Date(), 5000.0, dep);
+		sellerDAO.update(sellerToUpdate);
 		System.out.println("\nInsert before: ");
 		System.out.println(sellerToInsert);
 		
