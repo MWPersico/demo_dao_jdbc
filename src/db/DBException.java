@@ -1,5 +1,6 @@
 package db;
 
+// Exceção personalizada de tempo de execução, nao demanda blocos try/catch
 public class DBException extends RuntimeException{
 	
 	private static final long serialVersionUID = 1L;

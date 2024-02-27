@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-// Classe para gerennciar uma conexão com banco de dados
+// Classe para gerennciar uma conexão com banco de dados feita com base no arquivo de connfiguração, permite a utilização de diferentes bancos de dados
 public class DB {
 	private static Connection conn = null;
 	
