@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+// Classe para gerennciar uma conexão com banco de dados
 public class DB {
 	private static Connection conn = null;
 	

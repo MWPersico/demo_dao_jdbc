@@ -13,9 +13,10 @@ import db.DBException;
 import model.dao.DepartmentDAO;
 import model.entities.Department;
 
-public class DepartmentDAOJDBC implements DepartmentDAO{
+// Implementação do DAO usando JDBC para entidade Department
+public class DepartmentDAOJDBC implements DepartmentDAO {
 	private Connection conn;
-	
+
 	public DepartmentDAOJDBC(Connection conn) {
 		this.conn = conn;
 	}
@@ -24,24 +25,23 @@ public class DepartmentDAOJDBC implements DepartmentDAO{
 	public void insert(Department department) {
 		PreparedStatement statement = null;
 		ResultSet result = null;
-		String query = "INSERT INTO department "
-				+"(Name) VALUES (?)";
+		String query = "INSERT INTO department " + "(Name) VALUES (?)";
 		try {
 			statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, department.getName());
 			int rowsAffected = statement.executeUpdate();
-			
-			if(rowsAffected == 1) {
+
+			if (rowsAffected == 1) {
 				result = statement.getGeneratedKeys();
-				if(result.next()) {
+				if (result.next()) {
 					department.setId(result.getInt(1));
 				}
-			}else {
+			} else {
 				throw new DBException("Unexpected error: No rows affected");
 			}
-		}catch(SQLException ex) {
+		} catch (SQLException ex) {
 			throw new DBException(ex.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(statement);
 			DB.closeResultSet(result);
 		}
@@ -50,21 +50,19 @@ public class DepartmentDAOJDBC implements DepartmentDAO{
 	@Override
 	public void update(Department department) {
 		PreparedStatement statement = null;
-		String query = "UPDATE department "
-				+"SET Name = ? "
-				+"WHERE Id = ?";
+		String query = "UPDATE department " + "SET Name = ? " + "WHERE Id = ?";
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setString(1, department.getName());
 			statement.setInt(2, department.getId());
 			int rowsAffected = statement.executeUpdate();
-			
-			if(rowsAffected < 1) {
+
+			if (rowsAffected < 1) {
 				throw new DBException("Unexpected error: No rows affected");
 			}
-		}catch(SQLException ex) {
+		} catch (SQLException ex) {
 			throw new DBException(ex.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(statement);
 		}
 	}
@@ -76,14 +74,11 @@ public class DepartmentDAOJDBC implements DepartmentDAO{
 		try {
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, id);
-			int rowsAffected = statement.executeUpdate();
-			
-			if(rowsAffected < 1) {
-				throw new DBException("Unexpected error: No rows affected");
-			}
-		}catch(SQLException ex) {
+			statement.executeUpdate();
+
+		} catch (SQLException ex) {
 			throw new DBException(ex.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(statement);
 		}
 	}
@@ -97,13 +92,13 @@ public class DepartmentDAOJDBC implements DepartmentDAO{
 			statement = conn.prepareStatement(query);
 			statement.setInt(1, id);
 			result = statement.executeQuery();
-			
-			if(result.next()) {
+
+			if (result.next()) {
 				return new Department(result.getInt("Id"), result.getString("Name"));
 			}
-		}catch(SQLException ex) {
+		} catch (SQLException ex) {
 			throw new DBException(ex.getMessage());
-		}finally {
+		} finally {
 			DB.closeResultSet(result);
 			DB.closeStatement(statement);
 		}
@@ -119,13 +114,13 @@ public class DepartmentDAOJDBC implements DepartmentDAO{
 		try {
 			statement = conn.createStatement();
 			result = statement.executeQuery(query);
-			
-			while(result.next()) {
+
+			while (result.next()) {
 				departments.add(new Department(result.getInt("Id"), result.getString("Name")));
 			}
-		}catch(SQLException ex) {
+		} catch (SQLException ex) {
 			throw new DBException(ex.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(statement);
 			DB.closeResultSet(result);
 		}
